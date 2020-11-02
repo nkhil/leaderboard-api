@@ -1,9 +1,9 @@
 'use strict'
 
 function ping(_, res) {
-  res.status(200).json({ message: 'OK' });
+  res.status(200).json({ status: 'OK' });
 }
 
-module.exports = { 
+module.exports = {
   ping,
 }

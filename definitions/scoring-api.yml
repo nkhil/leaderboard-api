@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Sample API
+  title: Scoring API
   description: Optional multi-line or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
   version: 0.1.9
 servers:
@@ -16,49 +16,89 @@ paths:
       x-eov-operation-id: ping
       x-eov-operation-handler: healthcheck
       parameters:
-        - $ref: '#/components/parameters/x-correlation-id'
+        - $ref: "#/components/parameters/x-correlation-id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 properties:
-                  message:
+                  status:
                     type: string
                     example: OK
-        '401':
-          $ref: '#/components/responses/401'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /team:
+    post:
+      description: Create a new team
+      operationId: createTeam
+      x-eov-operation-id: createTeam
+      x-eov-operation-handler: team
+      requestBody:
+        description: team schema
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/teamSchema"
+      responses:
+        "201":
+          description: OK
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+    get:
+      description: Get all the teams
+      operationId: getTeams
+      x-eov-operation-id: getTeams
+      x-eov-operation-handler: team
+      responses:
+        "200":
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getTeamsResponse"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 components:
   responses:
-    '401':
+    "401":
       description: Unauthorised Error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/UnauthorisedError'
-    '404':
+            $ref: "#/components/schemas/UnauthorisedError"
+    "404":
       description: Not Found Error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/NotFoundError'
-    '500':
+            $ref: "#/components/schemas/NotFoundError"
+    "500":
       description: Server Error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/InternalServerError'
+            $ref: "#/components/schemas/InternalServerError"
     default:
       description: Invalid Request Error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/InvalidRequestError'
+            $ref: "#/components/schemas/InvalidRequestError"
   parameters:
     x-correlation-id:
       name: x-correlation-id
@@ -69,6 +109,17 @@ components:
         type: string
         format: uuid
   schemas:
+    getTeamsResponse:
+      description: get teams response
+      type: array
+      items:
+        $ref: "#/components/schemas/teamSchema"
+    teamSchema:
+      description: team schema
+      type: object
+      properties:
+        teamName:
+          type: string
     healthCheckResponse:
       description: healthcheck OK response
       type: object
