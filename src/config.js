@@ -1,6 +1,5 @@
-'use strict';
-
 const { name } = require('../package.json');
+require('dotenv').config()
 
 module.exports = {
   name,
