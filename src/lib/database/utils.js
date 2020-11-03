@@ -2,7 +2,7 @@ const Model = require('../model/teams');
 
 async function addTeam(team) {
   try {
-    return await Model.create({ teamName: 'whatever' });
+    return await Model.create(team);
   } catch (err) {
     console.log(`Error: ${err}`);
     throw err;
