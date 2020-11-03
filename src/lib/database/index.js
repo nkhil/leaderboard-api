@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+mongoose.set('useCreateIndex', true)
 const {
   mongo: { connectionString },
 } = require('../../config');
