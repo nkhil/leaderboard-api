@@ -8,9 +8,10 @@
   },
   "scripts": {
     "test": "NODE_ENV=TEST npm test",
-    "develop": "NODE_ENV=DEVELOPMENT nodemon --use_strict index.js",
+    "develop": "NODE_ENV=DEVELOPMENT nodemon --use_strict src/index.js",
     "start": "NODE_ENV=PRODUCTION node --use_strict index.js",
-    "run:docker": "docker-compose up --build app"
+    "run:docker": "docker-compose up --build app",
+    "mongo-local": "bash local.sh"
   },
   "author": "Nikhil Vijayan",
   "license": "MIT",
