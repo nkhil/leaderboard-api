@@ -6,6 +6,9 @@ async function createTeam(req, res) {
     await db.addTeam(team)
     res.status(201).send()
   } catch (error) {
+    if (error && error.code === 11000) {
+      res.status(409).send()
+    }
     console.log(error)
   }
 }
