@@ -57,8 +57,8 @@ paths:
           $ref: "#/components/responses/500"
     get:
       description: Get all the teams
-      operationId: getTeams
-      x-eov-operation-id: getTeams
+      operationId: getTeam
+      x-eov-operation-id: getTeam
       x-eov-operation-handler: team
       responses:
         "200":
@@ -67,6 +67,38 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getTeamsResponse"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+    put:
+      description: Get all the teams
+      operationId: putTeam
+      x-eov-operation-id: putTeam
+      x-eov-operation-handler: team
+      responses:
+        "200":
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getTeamsResponse"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+    delete:
+      description: Get all the teams
+      operationId: deleteTeam
+      x-eov-operation-id: deleteTeam
+      x-eov-operation-handler: team
+      responses:
+        "204":
+          description: team deletion confirmation
         "401":
           $ref: "#/components/responses/401"
         "404":
@@ -97,8 +129,8 @@ paths:
           $ref: "#/components/responses/500"
     get:
       description: Get all the users for a team
-      operationId: getUsers
-      x-eov-operation-id: getUsers
+      operationId: getUser
+      x-eov-operation-id: getUser
       x-eov-operation-handler: user
       parameters:
         - $ref: "#/components/parameters/teamName"
