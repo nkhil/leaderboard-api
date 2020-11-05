@@ -6,16 +6,16 @@
 
 | No. | Schema | operationId | Code   |
 |-----|--------|-------------|--------|
-| 01  | team   | createTeam  | SCOR01 |
-| 02  | team   | getTeam     | SCOR02 |
-| 02  | team   | putTeam     | SCOR03 |
-| 03  | team   | deleteTeam  | SCOR04 |
+| 01  | team   | createTeam  | TEA01  |
+| 02  | team   | getTeam     | TEA02  |
+| 02  | team   | putTeam     | TEA03  |
+| 03  | team   | deleteTeam  | TEA04  |
 
 ### User
 
 | No. | Schema | operationId | Code   |
 |-----|--------|-------------|--------|
-| 01  | user   | CreateUser  | SCOR01 |
-| 02  | user   | getUser     | SCOR02 |
-| 02  | user   | putUser     | SCOR03 |
-| 03  | user   | deleteUser  | SCOR04 |
+| 01  | user   | CreateUser  | USR01  |
+| 02  | user   | getUser     | USR02  |
+| 02  | user   | putUser     | USR03  |
+| 03  | user   | deleteUser  | USR04  |
