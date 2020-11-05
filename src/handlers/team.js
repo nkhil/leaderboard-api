@@ -1,5 +1,8 @@
 const db = require('../lib/database/utils')
 const logger = require('pino')()
+const { findUserByEmail, findApiKeyHashBySalt } = require('../lib/database/utils')
+const { validateHash } = require('../lib/apikey')
+const { SALT_LENGTH } = require('../constants')
 
 async function createTeam(req, res) {
   try {
@@ -19,8 +22,16 @@ async function createTeam(req, res) {
 
 async function getTeam(req, res) {
   try {
-    const teams = await db.getTeams()
-    res.status(200).json(teams)
+    const { 'x-api-key': apiKey } = req.headers
+    const salt = apiKey.substr(0, SALT_LENGTH)
+    const [apiKeyEntry] = await findApiKeyHashBySalt(salt)
+    const { apiKeyHash } = apiKeyEntry
+    const apiKeyIsValid = validateHash(apiKeyHash, apiKey.slice(SALT_LENGTH))
+    if (apiKeyIsValid) {
+      const teams = await db.getTeams()
+      res.status(200).json(teams)
+    }
+    res.status(401).json({ msg: 'Unauthorized request' })
   } catch (error) {
     console.log(error)
   }

@@ -12,10 +12,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Initialise database
 (async function databaseInit() {
   await database.connect();
 })();
 
+// Route the request to handler
 new OpenApiValidator({
   apiSpec,
   validateResponses: true,

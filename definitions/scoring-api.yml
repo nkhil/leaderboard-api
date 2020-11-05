@@ -33,6 +33,25 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
+  /apiKey:
+    get:
+      description: Get a new API key
+      operationId: getApiKey
+      x-eov-operation-id: getApiKey
+      x-eov-operation-handler: apiKey
+      responses:
+        "200":
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getApiKeyResponse"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
   /team:
     post:
       description: Create a new team
@@ -60,6 +79,8 @@ paths:
       operationId: getTeam
       x-eov-operation-id: getTeam
       x-eov-operation-handler: team
+      parameters:
+        - $ref: "#/components/parameters/apiKey"
       responses:
         "200":
           description: A list of users
@@ -182,14 +203,27 @@ components:
       schema:
         type: string
         format: uuid
+    apiKey:
+      name: x-api-key
+      required: true
+      in: header
+      description: api key
+      schema:
+        type: string
     teamName:
       name: teamId
       in: query
       required: true
       schema:
         type: string
-        format: uuid
   schemas:
+    getApiKeyResponse:
+      description: new api key response
+      type: object
+      properties:
+        apiKey:
+          type: string
+          pattern: '[a-zA-Z0-9\b]{32}$' # This is set in constants
     getUsersResponse:
       description: get users from a team
       type: array
@@ -214,12 +248,15 @@ components:
           type: string
         teamId:
           type: string
-          format: uuid
     postUserSchema:
       description: user schema
       type: array
       items:
         type: object
+        required:
+          - firstName
+          - lastName
+          - email
         properties:
           firstName:
             type: string
@@ -229,13 +266,13 @@ components:
             type: string
           teamName:
             type: string
+            nullable: true
     userSchema:
       description: user schema
       type: object
       properties:
         userId:
           type: string
-          format: uuid
         firstName:
           type: string
         lastName:
