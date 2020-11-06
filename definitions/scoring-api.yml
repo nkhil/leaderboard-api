@@ -168,6 +168,57 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
+  /sign-s3:
+    get:
+      description: get signed Url
+      operationId: getS3SignedUrl
+      x-eov-operation-id: getS3SignedUrl
+      x-eov-operation-handler: s3
+      parameters:
+        - in: query
+          name: filename
+          schema:
+            type: string
+          allowReserved: true
+          description: File name
+        - in: query
+          name: filetype
+          schema:
+            type: string
+          allowReserved: true
+          description: File type
+      responses:
+        "200":
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getS3SignedUrlResponse"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /account:
+    get:
+      description: Account
+      operationId: getAccount
+      x-eov-operation-id: getAccount
+      x-eov-operation-handler: account
+      responses:
+        "200":
+          description: account page
+          content:
+            text/html:
+              schema:
+                type: string
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 components:
   responses:
     "401":
@@ -216,7 +267,20 @@ components:
       required: true
       schema:
         type: string
+        example: Team America
   schemas:
+    getS3SignedUrlResponse:
+      description: S3 signed URL response
+      type: object
+      additionalProperties: false
+      required:
+        - signedRequest
+        - url
+      properties:
+        signedRequest:
+          type: string
+        url:
+          type: string
     getApiKeyResponse:
       description: new api key response
       type: object

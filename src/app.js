@@ -5,11 +5,14 @@ const { OpenApiValidator } = require('express-openapi-validator');
 const config = require('./config');
 const database = require('./lib/database')
 
-const app = express();
-const apiSpec = path.join(__dirname, `../definitions/${config.name}.yml`);
+const app = express()
+app.set('views', './src/views')
+app.use(express.static('./public'))
+app.engine('html', require('ejs').renderFile)
+const apiSpec = path.join(__dirname, `../definitions/${config.name}.yml`)
 
-app.use(cors());
-app.use(express.json());
+app.use(cors())
+app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 
 // Initialise database
