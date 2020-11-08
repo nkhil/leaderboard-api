@@ -4,6 +4,7 @@ const path = require('path');
 const { OpenApiValidator } = require('express-openapi-validator');
 const config = require('./config');
 const database = require('./lib/database')
+const middleware = require('./middleware/verifyApiKey')
 
 const app = express()
 app.set('views', './src/views')
@@ -25,6 +26,13 @@ new OpenApiValidator({
   apiSpec,
   validateResponses: true,
   operationHandlers: path.join(__dirname, './handlers'),
+  validateSecurity: {
+    handlers: {
+      verifyApiKey(req, scopes) {
+        return middleware.verifyApiKey(req)
+      },
+    },
+  },
 })
   .install(app)
   .then(() => {

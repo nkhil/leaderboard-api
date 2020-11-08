@@ -19,6 +19,15 @@ async function getTeams() {
   }
 }
 
+async function getTeam(teamId) {
+  try {
+    return await TeamModel.findById(teamId).exec()
+  } catch (error) {
+    console.log('Error getting team')
+    console.log(error)
+  }
+}
+
 async function addUser(user) {
   try {
     return await UserModel.create(user)
@@ -38,6 +47,7 @@ async function findUserByEmail(email) {
 }
 
 async function addApiKey(apiKey) {
+  console.log('addApiKey -> apiKey', apiKey)
   try {
     return await ApiKeyModel.create(apiKey)
   } catch (error) {
@@ -51,15 +61,24 @@ async function findApiKeyHashBySalt(salt) {
     return await ApiKeyModel.find({ salt })
   } catch (error) {
     console.log('findApiKeyHashBySalt -> error', error)
+  }
+}
 
+async function findApiKeyByTeamId(teamId) {
+  try {
+    return await ApiKeyModel.find({ teamId })
+  } catch (error) {
+    console.log('findApiKeyByTeamId -> error', error)
   }
 }
 
 module.exports = {
   addTeam,
   getTeams,
+  getTeam,
   addUser,
   addApiKey,
   findUserByEmail,
   findApiKeyHashBySalt,
+  findApiKeyByTeamId,
 }

@@ -18,18 +18,13 @@ function md5(string) {
 
 function createHash(str) {
   var salt = generateSalt(SALT_LENGTH)
-  console.log('createHash -> salt', salt)
   var hash = md5(str + salt)
-  console.log('createHash -> hash', hash)
   return salt + hash;
 }
 
 function validateHash(hash, apiKeyFromRequest) {
-  console.log('validateHash -> hash', hash)
   var salt = hash.substr(0, SALT_LENGTH);
-  console.log('validateHash -> salt', salt)
   var validHash = salt + md5(apiKeyFromRequest + salt);
-  console.log('validateHash -> validHash', validHash)
   return hash === validHash;
 }
 

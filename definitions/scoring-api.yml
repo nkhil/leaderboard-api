@@ -39,6 +39,8 @@ paths:
       operationId: getApiKey
       x-eov-operation-id: getApiKey
       x-eov-operation-handler: apiKey
+      parameters:
+        - $ref: "#/components/parameters/x-team-id"
       responses:
         "200":
           description: A list of users
@@ -75,15 +77,17 @@ paths:
         "500":
           $ref: "#/components/responses/500"
     get:
-      description: Get all the teams
+      description: Get your team info
       operationId: getTeam
       x-eov-operation-id: getTeam
       x-eov-operation-handler: team
+      security:
+        - verifyApiKey: []
       parameters:
         - $ref: "#/components/parameters/apiKey"
       responses:
         "200":
-          description: A list of users
+          description: team info
           content:
             application/json:
               schema:
@@ -99,6 +103,8 @@ paths:
       operationId: putTeam
       x-eov-operation-id: putTeam
       x-eov-operation-handler: team
+      security:
+        - verifyApiKey: []
       responses:
         "200":
           description: A list of users
@@ -117,9 +123,37 @@ paths:
       operationId: deleteTeam
       x-eov-operation-id: deleteTeam
       x-eov-operation-handler: team
+      security:
+        - verifyApiKey: []
       responses:
         "204":
           description: team deletion confirmation
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /team/{teamId}:
+    put:
+      description: put team
+      operationId: putTeam
+      x-eov-operation-id: putTeam
+      x-eov-operation-handler: putTeam
+      parameters:
+        - in: path
+          name: teamId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the team to get
+      responses:
+        "200":
+          description: Successful PUT response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/putTeamResponse"
         "401":
           $ref: "#/components/responses/401"
         "404":
@@ -220,6 +254,11 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 components:
+  securitySchemes:
+    verifyApiKey:
+      type: apiKey
+      in: header
+      name: x-api-key
   responses:
     "401":
       description: Unauthorised Error
@@ -246,6 +285,13 @@ components:
           schema:
             $ref: "#/components/schemas/InvalidRequestError"
   parameters:
+    x-team-id:
+      name: x-team-id
+      description: team id for an existing team
+      in: header
+      required: true
+      schema:
+        type: string
     x-correlation-id:
       name: x-correlation-id
       required: true
@@ -261,6 +307,7 @@ components:
       description: api key
       schema:
         type: string
+        additionalProperties: false
     teamName:
       name: teamId
       in: query
@@ -294,16 +341,18 @@ components:
       items:
         $ref: "#/components/schemas/userSchema"
     getTeamsResponse:
-      description: get teams response
-      type: array
-      items:
-        $ref: "#/components/schemas/teamSchema"
+      $ref: "#/components/schemas/teamSchema"
     postTeamSchema:
       description: team schema
       type: object
+      additionalProperties: false
+      required:
+        - teamName
       properties:
         teamName:
           type: string
+    putTeamResponse:
+      $ref: "#/components/schemas/teamSchema"
     teamSchema:
       description: team schema
       type: object
