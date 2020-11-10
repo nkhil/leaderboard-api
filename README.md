@@ -1,3 +1,3 @@
-## Scoring API
+## Leaderboard
 
 _Coming Soon_
