@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Scoring API
   description: Optional multi-line or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
-  version: 0.1.9
+  version: 1.0.0
 servers:
   - url: http://api.example.com/v1
     description: Optional server description, e.g. Main (production) server
@@ -33,6 +33,49 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
+  /login:
+    post:
+      description: Get auth token
+      operationId: loginUser
+      x-eov-operation-id: loginUser
+      x-eov-operation-handler: login
+      parameters:
+        - $ref: "#/components/parameters/apiKey"
+        - $ref: "#/components/parameters/clientId"
+      responses:
+        "200":
+          description: auth token response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getTokenResponse"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /token:
+    get:
+      description: Get auth token in exchange for refresh token
+      operationId: getAuthToken
+      x-eov-operation-id: getAuthToken
+      x-eov-operation-handler: token
+      parameters:
+        - $ref: "#/components/parameters/refreshToken"
+      responses:
+        "200":
+          description: auth token response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getTokenResponse"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
   /apiKey:
     get:
       description: Get a new API key
@@ -56,6 +99,8 @@ paths:
           $ref: "#/components/responses/500"
   /team:
     post:
+      security:
+        - bearerTokenScheme: []
       description: Create a new team
       operationId: createTeam
       x-eov-operation-id: createTeam
@@ -69,13 +114,14 @@ paths:
               $ref: "#/components/schemas/postTeamSchema"
       responses:
         "201":
-          description: OK
+          description: Team created successfully
         "401":
           $ref: "#/components/responses/401"
         "404":
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
+  /team/{teamId}:
     get:
       description: Get your team info
       operationId: getTeam
@@ -84,7 +130,12 @@ paths:
       security:
         - verifyApiKey: []
       parameters:
-        - $ref: "#/components/parameters/apiKey"
+        - in: path
+          name: teamId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the team to delete
       responses:
         "200":
           description: team info
@@ -98,43 +149,27 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
-    put:
-      description: Get all the teams
-      operationId: putTeam
-      x-eov-operation-id: putTeam
-      x-eov-operation-handler: team
-      security:
-        - verifyApiKey: []
-      responses:
-        "200":
-          description: A list of users
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/getTeamsResponse"
-        "401":
-          $ref: "#/components/responses/401"
-        "404":
-          $ref: "#/components/responses/404"
-        "500":
-          $ref: "#/components/responses/500"
     delete:
-      description: Get all the teams
+      description: deleteTeam
       operationId: deleteTeam
-      x-eov-operation-id: deleteTeam
-      x-eov-operation-handler: team
-      security:
-        - verifyApiKey: []
+      x-eov-operation-id: putTeam
+      x-eov-operation-handler: putTeam
+      parameters:
+        - in: path
+          name: teamId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the team to delete
       responses:
-        "204":
-          description: team deletion confirmation
+        "201":
+          description: Successful DELETE response
         "401":
           $ref: "#/components/responses/401"
         "404":
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
-  /team/{teamId}:
     put:
       description: put team
       operationId: putTeam
@@ -160,7 +195,33 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
-  /user:
+  /user/{userId}:
+    get:
+      description: Get all the users for a team
+      operationId: getUser
+      x-eov-operation-id: getUser
+      x-eov-operation-handler: user
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the user
+      responses:
+        "200":
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/userSchema"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /users:
     post:
       description: Create a new user
       operationId: createUser
@@ -176,26 +237,6 @@ paths:
       responses:
         "201":
           description: OK
-        "401":
-          $ref: "#/components/responses/401"
-        "404":
-          $ref: "#/components/responses/404"
-        "500":
-          $ref: "#/components/responses/500"
-    get:
-      description: Get all the users for a team
-      operationId: getUser
-      x-eov-operation-id: getUser
-      x-eov-operation-handler: user
-      parameters:
-        - $ref: "#/components/parameters/teamName"
-      responses:
-        "200":
-          description: A list of users
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/getUsersResponse"
         "401":
           $ref: "#/components/responses/401"
         "404":
@@ -259,6 +300,10 @@ components:
       type: apiKey
       in: header
       name: x-api-key
+    bearerTokenScheme:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   responses:
     "401":
       description: Unauthorised Error
@@ -300,6 +345,13 @@ components:
       schema:
         type: string
         format: uuid
+    refreshToken:
+      name: x-refresh-token
+      required: true
+      in: cookie
+      description: refresh token
+      schema:
+        type: string
     apiKey:
       name: x-api-key
       required: true
@@ -308,6 +360,13 @@ components:
       schema:
         type: string
         additionalProperties: false
+    clientId:
+      name: x-client-id
+      required: true
+      description: API user ID
+      in: header
+      schema:
+        type: string
     teamName:
       name: teamId
       in: query
@@ -316,6 +375,18 @@ components:
         type: string
         example: Team America
   schemas:
+    getTokenResponse:
+      description: Get token response
+      type: object
+      additionalProperties: false
+      required:
+        - authToken
+        - refreshToken
+      properties:
+        authToken:
+          type: string
+        refreshToken:
+          type: string
     getS3SignedUrlResponse:
       description: S3 signed URL response
       type: object
@@ -335,11 +406,6 @@ components:
         apiKey:
           type: string
           pattern: '[a-zA-Z0-9\b]{32}$' # This is set in constants
-    getUsersResponse:
-      description: get users from a team
-      type: array
-      items:
-        $ref: "#/components/schemas/userSchema"
     getTeamsResponse:
       $ref: "#/components/schemas/teamSchema"
     postTeamSchema:
