@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: Scoring API
-  description: Optional multi-line or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  title: Leaderboard API
+  description: A simple leaderboard API that helps manage teams, games and players.
   version: 1.0.0
 servers:
   - url: http://api.example.com/v1
@@ -70,27 +70,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/getTokenResponse"
-        "401":
-          $ref: "#/components/responses/401"
-        "404":
-          $ref: "#/components/responses/404"
-        "500":
-          $ref: "#/components/responses/500"
-  /apiKey:
-    get:
-      description: Get a new API key
-      operationId: getApiKey
-      x-eov-operation-id: getApiKey
-      x-eov-operation-handler: apiKey
-      parameters:
-        - $ref: "#/components/parameters/x-team-id"
-      responses:
-        "200":
-          description: A list of users
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/getApiKeyResponse"
         "401":
           $ref: "#/components/responses/401"
         "404":
