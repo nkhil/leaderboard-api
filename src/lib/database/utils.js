@@ -1,8 +1,6 @@
 const { TeamModel } = require('../model/teams');
 const { UserModel } = require('../model/user');
 const { ApiKeyModel } = require('../model/apiKey');
-const { RefreshTokenModel } = require('../model/refreshToken');
-const refreshToken = require('../model/refreshToken');
 
 async function addTeam(team) {
   try {
