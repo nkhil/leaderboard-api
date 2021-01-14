@@ -10,7 +10,7 @@
   "scripts": {
     "test": "NODE_ENV=TEST npm test",
     "develop": "NODE_ENV=DEVELOPMENT nodemon --use_strict src/index.js",
-    "start": "NODE_ENV=PRODUCTION node --use_strict src/.",
+    "start": "node --use_strict src/.",
     "run:docker": "docker-compose up --build app",
     "mongo-local": "bash local.sh",
     "local": "nodemon --use-strict src/."
