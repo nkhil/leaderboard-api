@@ -9,14 +9,12 @@ servers:
   - url: http://staging-api.example.com
     description: Optional server description, e.g. Internal staging server for testing
 paths:
-  /healthcheck/ping:
+  /liveness:
     get:
       description: Returns the readiness of the service
       operationId: ping
       x-eov-operation-id: ping
       x-eov-operation-handler: healthcheck
-      parameters:
-        - $ref: "#/components/parameters/x-correlation-id"
       responses:
         "200":
           description: OK
@@ -33,36 +31,18 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
-  /login:
-    post:
+  /token:
+    get:
+      security:
+        - verifyApiKey: []
       description: Get auth token
-      operationId: loginUser
-      x-eov-operation-id: loginUser
-      x-eov-operation-handler: login
+      operationId: generateToken
+      x-eov-operation-id: generateToken
+      x-eov-operation-handler: token
       parameters:
         - $ref: "#/components/parameters/apiKey"
         - $ref: "#/components/parameters/clientId"
-      responses:
-        "200":
-          description: auth token response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/getTokenResponse"
-        "401":
-          $ref: "#/components/responses/401"
-        "404":
-          $ref: "#/components/responses/404"
-        "500":
-          $ref: "#/components/responses/500"
-  /token:
-    get:
-      description: Get auth token in exchange for refresh token
-      operationId: getAuthToken
-      x-eov-operation-id: getAuthToken
-      x-eov-operation-handler: token
-      parameters:
-        - $ref: "#/components/parameters/refreshToken"
+        - $ref: "#/components/parameters/clientSecret"
       responses:
         "200":
           description: auth token response
@@ -79,7 +59,7 @@ paths:
   /team:
     post:
       security:
-        - bearerTokenScheme: []
+        - bearerAuth: []
       description: Create a new team
       operationId: createTeam
       x-eov-operation-id: createTeam
@@ -131,8 +111,8 @@ paths:
     delete:
       description: deleteTeam
       operationId: deleteTeam
-      x-eov-operation-id: putTeam
-      x-eov-operation-handler: putTeam
+      x-eov-operation-id: deleteTeam
+      x-eov-operation-handler: team
       parameters:
         - in: path
           name: teamId
@@ -153,7 +133,7 @@ paths:
       description: put team
       operationId: putTeam
       x-eov-operation-id: putTeam
-      x-eov-operation-handler: putTeam
+      x-eov-operation-handler: team
       parameters:
         - in: path
           name: teamId
@@ -279,7 +259,7 @@ components:
       type: apiKey
       in: header
       name: x-api-key
-    bearerTokenScheme:
+    bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
@@ -324,13 +304,6 @@ components:
       schema:
         type: string
         format: uuid
-    refreshToken:
-      name: x-refresh-token
-      required: true
-      in: cookie
-      description: refresh token
-      schema:
-        type: string
     apiKey:
       name: x-api-key
       required: true
@@ -343,6 +316,13 @@ components:
       name: x-client-id
       required: true
       description: API user ID
+      in: header
+      schema:
+        type: string
+    clientSecret:
+      name: x-client-secret
+      required: true
+      description: API user secret
       in: header
       schema:
         type: string
@@ -360,11 +340,8 @@ components:
       additionalProperties: false
       required:
         - authToken
-        - refreshToken
       properties:
         authToken:
-          type: string
-        refreshToken:
           type: string
     getS3SignedUrlResponse:
       description: S3 signed URL response

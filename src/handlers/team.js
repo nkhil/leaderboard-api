@@ -38,9 +38,9 @@ function putTeam(req, res) {
   try {
     logger.info({ msg: `TEA03_01: Received PUT request` })
     const { teamId } = req.params
-    
+
   } catch (error) {
-    
+
   }
 }
 

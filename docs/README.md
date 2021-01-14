@@ -2,6 +2,13 @@
 
 ## Operation codes
 
+### Authentication
+
+| No. | Schema | operationId  | Code   |
+|-----|--------|--------------|--------|
+| 01  | NA     | verifyApiKey | OP001  |
+| 02  | NA     | verifyToken  | OP002  |
+
 ### Team
 
 | No. | Schema | operationId | Code   |

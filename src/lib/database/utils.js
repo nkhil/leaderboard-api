@@ -1,6 +1,8 @@
 const { TeamModel } = require('../model/teams');
-const { UserModel } = require('../model/user')
-const { ApiKeyModel } = require('../model/apiKey')
+const { UserModel } = require('../model/user');
+const { ApiKeyModel } = require('../model/apiKey');
+const { RefreshTokenModel } = require('../model/refreshToken');
+const refreshToken = require('../model/refreshToken');
 
 async function addTeam(team) {
   try {
@@ -72,6 +74,15 @@ async function findApiKeyByTeamId(teamId) {
   }
 }
 
+async function findApiKeyByClientId(clientId, apiKey) {
+  try {
+    return await ApiKeyModel.find({ clientId, apiKey })
+  } catch (error) {
+    console.log('🚀 ~ file: utils.js ~ line 79 ~ findApiKeyByUserId ~ error', error)
+    console.log('/n Error findApiKeyByUserId')
+  }
+}
+
 module.exports = {
   addTeam,
   getTeams,
@@ -81,4 +92,5 @@ module.exports = {
   findUserByEmail,
   findApiKeyHashBySalt,
   findApiKeyByTeamId,
+  findApiKeyByClientId,
 }

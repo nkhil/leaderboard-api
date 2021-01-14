@@ -22,14 +22,18 @@ function createHash(str) {
   return salt + hash;
 }
 
-function validateHash(hash, apiKeyFromRequest) {
+function validateHash(hash, valueFromRequest) {
+  console.log('🚀 ~ file: index.js ~ line 26 ~ validateHash ~ valueFromRequest', valueFromRequest)
+  console.log('🚀 ~ file: index.js ~ line 26 ~ validateHash ~ hash', hash)
   var salt = hash.substr(0, SALT_LENGTH);
-  var validHash = salt + md5(apiKeyFromRequest + salt);
+  console.log('🚀 ~ file: index.js ~ line 27 ~ validateHash ~ salt', salt)
+  var validHash = salt + md5(valueFromRequest + salt);
+  console.log('🚀 ~ file: index.js ~ line 29 ~ validateHash ~ validHash', validHash)
   return hash === validHash;
 }
 
 function generateApiKey(len) {
-  if (!len) throw new Error(`API Key length not defined. Length supplied: ${len}`)
+  if (!len) throw new Error(`API Key length not defined.`)
   return crypto.randomBytes(64).toString('hex').slice(0, len)
 }
 
