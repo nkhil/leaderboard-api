@@ -80,6 +80,26 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
+    get:
+      security:
+        - bearerAuth: []
+      description: get all teams for clientId
+      operationId: getTeams
+      x-eov-operation-id: getTeam
+      x-eov-operation-handler: team
+      responses:
+        "200":
+          description: all teams for clientId
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getTeamsResponse"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
   /team/{teamId}:
     get:
       description: Get your team info
@@ -87,21 +107,21 @@ paths:
       x-eov-operation-id: getTeam
       x-eov-operation-handler: team
       security:
-        - verifyApiKey: []
+        - bearerAuth: []
       parameters:
         - in: path
           name: teamId
           schema:
-            type: integer
+            type: string
           required: true
-          description: Numeric ID of the team to delete
+          description: Numeric ID of the team
       responses:
         "200":
           description: team info
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/getTeamsResponse"
+                $ref: "#/components/schemas/getTeamResponse"
         "401":
           $ref: "#/components/responses/401"
         "404":
@@ -362,8 +382,12 @@ components:
         apiKey:
           type: string
           pattern: '[a-zA-Z0-9\b]{32}$' # This is set in constants
-    getTeamsResponse:
+    getTeamResponse:
       $ref: "#/components/schemas/teamSchema"
+    getTeamsResponse:
+      type: array
+      items:
+        $ref: "#/components/schemas/teamSchema"
     postTeamSchema:
       description: team schema
       type: object

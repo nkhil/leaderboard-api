@@ -11,9 +11,9 @@ async function addTeam(team) {
   }
 }
 
-async function getTeams() {
+async function getTeams(clientId) {
   try {
-    return await TeamModel.find()
+    return await TeamModel.find({ clientId }).exec()
   } catch (error) {
     console.log(error)
   }
@@ -21,7 +21,7 @@ async function getTeams() {
 
 async function getTeam(teamId) {
   try {
-    return await TeamModel.findById(teamId).exec()
+    return await TeamModel.findById(teamId).exec();
   } catch (error) {
     console.log('Error getting team')
     console.log(error)

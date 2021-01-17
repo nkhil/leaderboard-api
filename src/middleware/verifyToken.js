@@ -14,9 +14,9 @@ function verifyToken(req) {
   try {
     logger.info({ msg: `Verifying bearer token` });
     const bearerToken = extractToken(req);
-    const { clientId } = jwt.verify(bearerToken, 'secret');
+    const token = jwt.verify(bearerToken, 'secret');
     logger.info({ msg: `Token verified succcessfully` });
-    req.clientId = clientId;
+    req.clientId = token.clientId;
     return true;
   } catch (err) {
     logger.error({ msg: `ERROR: Token verification failed` });

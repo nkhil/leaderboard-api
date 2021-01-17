@@ -3,8 +3,8 @@ const cors = require('cors');
 const path = require('path');
 const OpenApiValidator = require('express-openapi-validator');
 const { port } = require('./config');
-const database = require('./lib/database')
-const middleware = require('./middleware')
+const database = require('./lib/database');
+const middleware = require('./middleware');
 const bodyParser = require('body-parser');
 const http = require('http');
 
@@ -16,12 +16,10 @@ const apiSpec = path.join(__dirname, `../openapi/openapi.yml`);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.text());
 app.use(bodyParser.json());
-
-// app.use(cors())
-// app.use(express.json())
-// app.use(express.urlencoded({ extended: false }));
-
-
+app.use('/swagger', express.static(apiSpec));
+app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }));
 
 (async function init() {
   await database.connect();
