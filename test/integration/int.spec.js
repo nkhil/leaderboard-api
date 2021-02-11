@@ -1,8 +1,6 @@
 const init = require('../../src')
 const supertest = require('supertest')
 const database = require('../../src/lib/database')
-const mongoose = require('mongoose')
-const log = require('why-is-node-running')
 
 
 describe('Integration tests', () => {
