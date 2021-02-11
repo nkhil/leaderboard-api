@@ -22,6 +22,15 @@ async function connect() {
   }
 }
 
+async function disconnect() {
+  try {
+    await mongoose.connection.close();
+  } catch (error) {
+    console.log('🚀 ~ file: index.js ~ line 29 ~ disconnect ~ error', error)
+  }
+}
+
 module.exports = {
   connect,
+  disconnect,
 };

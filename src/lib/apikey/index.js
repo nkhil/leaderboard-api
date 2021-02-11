@@ -23,12 +23,8 @@ function createHash(str) {
 }
 
 function validateHash(hash, valueFromRequest) {
-  console.log('🚀 ~ file: index.js ~ line 26 ~ validateHash ~ valueFromRequest', valueFromRequest)
-  console.log('🚀 ~ file: index.js ~ line 26 ~ validateHash ~ hash', hash)
   var salt = hash.substr(0, SALT_LENGTH);
-  console.log('🚀 ~ file: index.js ~ line 27 ~ validateHash ~ salt', salt)
   var validHash = salt + md5(valueFromRequest + salt);
-  console.log('🚀 ~ file: index.js ~ line 29 ~ validateHash ~ validHash', validHash)
   return hash === validHash;
 }
 
