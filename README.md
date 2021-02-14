@@ -1,4 +1,4 @@
-[![nkhil](https://circleci.com/gh/nkhil/leaderboard-api.svg?style=svg)](https://app.circleci.com/pipelines/github/nkhil/leaderboard-api)
+![example workflow name](https://github.com/nkhil/leaderboard-api/workflows/Node.js%20CI/badge.svg?branch=master)
 
 # Leaderboard API
 
