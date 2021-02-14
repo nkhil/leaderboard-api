@@ -23,6 +23,7 @@
     "run:docker": "docker-compose up --build app",
     "mongo-local": "bash local.sh",
     "local": "nodemon --use-strict src/.",
+    "dev": "npm run develop",
     "release": "standard-version"
   },
   "author": "Nikhil Vijayan",
