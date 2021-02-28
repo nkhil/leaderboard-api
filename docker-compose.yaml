@@ -12,25 +12,23 @@ services:
   app:
     build:
       context: .
-      target: production # refers to step in Dockerfile (multi-stage build)
+      target: production
     ports:
       - 8080:8080
-    image: app
-    container_name: app
     depends_on:
       - mongo
     environment:
-      MONGO_CONNECTION_STRING: mongodb://mongo/score-tracker?retryWrites=true&w=majority
+      MONGO_CONNECTION_STRING: mongodb://mongo/scoring-api?retryWrites=true&w=majority
     command: node --use_strict src/index.js
-  # test:
-  #   build:
-  #     context: .
-  #     target: test # refers to step in Dockerfile (multi-stage build)
-  #   depends_on:
-  #     - mongo
-  #     - app
-  #   environment:
-  #     MONGO_CONNECTION_STRING: mongodb://mongo/booksdb?retryWrites=true&w=majority
-  #   command: npm test
-  #   volumes:
-  #     - ./:/app
+  test:
+    build:
+      context: .
+      target: test
+    depends_on:
+      - mongo
+      - app
+    environment:
+      MONGO_CONNECTION_STRING: mongodb://mongo/booksdb?retryWrites=true&w=majority
+    command: npm test
+    volumes:
+      - ./:/app
