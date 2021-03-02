@@ -47,7 +47,6 @@ async function findUserByEmail(email) {
 }
 
 async function addApiKey(apiKey) {
-	console.log('addApiKey -> apiKey', apiKey)
 	try {
 		return await ApiKeyModel.create(apiKey)
 	} catch (error) {

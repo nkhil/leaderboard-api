@@ -19,7 +19,7 @@ describe('Integration tests', () => {
 	});
 
 	describe('GET /liveness', () => {
-		it('returns a 200 response with right params', async done => {
+		it('checks liveness of the service', async done => {
 			const res = await request.get('/liveness')
 			expect(res.status).toBe(200)
 			const parsedResponse = JSON.parse(res.text)
