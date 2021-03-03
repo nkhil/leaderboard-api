@@ -13,6 +13,8 @@ const { ApiKeyModel } = require('../../src/lib/model/apiKey');
 const { createJwtToken } = require('../../src/handlers/token');
 const { TeamModel } = require('../../src/lib/model/teams');
 
+const SOME_TEAM_NAME = 'some team name';
+
 describe('Integration tests', () => {
 	let request;
 
@@ -174,6 +176,72 @@ describe('Integration tests', () => {
 
 			it('returns a 401 response for missing bearer token', async done => {
 				const res = await request.delete('/team/00000');
+				expect(res.status).toBe(401);
+				done();
+			});
+		});
+
+		describe('PUT /team', () => {
+			it('can update a team successfully', async done => {
+				const teamName = 'Seattle Seahawks';
+				const newTeamName = 'Green Bay Packers';
+				await seedTeam({
+					clientId: CLIENT_ID,
+					teamName,
+				});
+				const token = createJwtToken(CLIENT_ID);
+				const teamId = await getTeamId(teamName);
+				const res = await request.put(`/team/${teamId}`)
+					.set('Authorization', token)
+					.send({
+						teamName: newTeamName,
+					});
+				expect(res.status).toBe(201);
+				done();
+			});
+
+			it('returns 400 if teamId is incorrect', async done => {
+				const teamName = 'Seattle Seahawks';
+				await seedTeam({
+					clientId: CLIENT_ID,
+					teamName,
+				});
+				const token = createJwtToken(CLIENT_ID);
+				const res = await request.put('/team/99999')
+					.set('Authorization', token)
+					.send({
+						teamName: SOME_TEAM_NAME,
+					});
+				expect(res.status).toBe(400);
+				done();
+			});
+
+			it('returns 400 if no teams exist for a client', async done => {
+				const token = createJwtToken(CLIENT_ID);
+				const res = await request.put('/team/99999')
+					.set('Authorization', token)
+					.send({
+						teamName: SOME_TEAM_NAME,
+					});
+				expect(res.status).toBe(400);
+				done();
+			});
+
+			it('returns 401 if token is incorrect', async done => {
+				const res = await request.put('/team/99999')
+					.set('Authorization', 'wrong_token')
+					.send({
+						teamName: SOME_TEAM_NAME,
+					});
+				expect(res.status).toBe(401);
+				done();
+			});
+
+			it('returns 401 if token is missing', async done => {
+				const res = await request.put('/team/99999')
+					.send({
+						teamName: SOME_TEAM_NAME,
+					});
 				expect(res.status).toBe(401);
 				done();
 			});

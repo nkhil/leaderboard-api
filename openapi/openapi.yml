@@ -156,15 +156,24 @@ paths:
       operationId: putTeam
       x-eov-operation-id: putTeam
       x-eov-operation-handler: team
+      requestBody:
+        description: team schema
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/putTeamSchema"
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: teamId
           schema:
-            type: integer
+            type: string
           required: true
           description: Numeric ID of the team to get
       responses:
-        "200":
+        "201":
           description: Successful PUT response
           content:
             application/json:
@@ -401,9 +410,17 @@ components:
           type: string
     putTeamResponse:
       $ref: "#/components/schemas/teamSchema"
+    putTeamSchema:
+      description: team schema
+      type: object
+      additionalProperties: false
+      properties:
+        teamName:
+          type: string
     teamSchema:
       description: team schema
       type: object
+      additionalProperties: true
       properties:
         teamName:
           type: string

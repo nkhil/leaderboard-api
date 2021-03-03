@@ -41,7 +41,6 @@ async function getTeam(req, res) {
         logger.info({ msg: `TEA01_05: no team found for given teamId` })
         return res.status(400).send();
       }
-      console.log('🚀 ~ file: team.js ~ line 39 ~ getTeam ~ teams', teams)
     }
     return res.status(200).json(teams)
   } catch (error) {
@@ -49,13 +48,31 @@ async function getTeam(req, res) {
   }
 }
 
-function putTeam(req, res) {
+async function putTeam(req, res) {
   try {
     logger.info({ msg: `TEA03_01: Received PUT request` })
-    const { teamId } = req.params
+    const { teamId } = req.params;
+		const teamIdIsValid = objectIdIsValid(teamId);
+		if (!teamIdIsValid) {
+			return res.status(400).send();
+		}
     const { clientId } = req;
+		const teams = await db.getTeams(clientId);
+    logger.info({ msg: `TEA03_02: teams: ${JSON.stringify(teams)}` });
+		if (teams.length === 0) {
+			return res.status(400).send();
+		}
+		const team = teams.find(t => t._id.toString() === teamId);
+		if (!team) {
+			res.status(400).send();
+		}
+		const teamInReq = req.body;
+		const newTeam = { team, ...teamInReq };
+		const result = await db.updateTeamById(teamId, newTeam);
+		res.status(201).json(result);
   } catch (error) {
-
+		console.trace(error);
+		res.status(500).send();
   }
 }
 

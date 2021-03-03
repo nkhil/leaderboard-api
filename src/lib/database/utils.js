@@ -45,6 +45,14 @@ async function deleteTeamById(id) {
 	}
 }
 
+async function updateTeamById(id, team) {
+	try {
+		return await TeamModel.findByIdAndUpdate(id, team);
+	} catch (error) {
+		console.trace(error);
+	}
+}
+
 async function addUser(user) {
 	try {
 		return await UserModel.create(user)
@@ -107,6 +115,7 @@ module.exports = {
 	getTeam,
 	getTeamByName,
 	deleteTeamById,
+	updateTeamById,
 	addUser,
 	addApiKey,
 	findUserByEmail,
