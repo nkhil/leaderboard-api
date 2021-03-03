@@ -1,7 +1,14 @@
 const init = require('../../src')
 const supertest = require('supertest')
 const database = require('../../src/lib/database')
-const { seedApiKey, seedTeam, decodeJwt, CLIENT_ID } = require('./helpers');
+const { 
+	seedApiKey, 
+	seedTeam, 
+	decodeJwt, 
+	getTeamId,
+	getTeams, 
+	CLIENT_ID,
+} = require('./helpers');
 const { ApiKeyModel } = require('../../src/lib/model/apiKey');
 const { createJwtToken } = require('../../src/handlers/token');
 const { TeamModel } = require('../../src/lib/model/teams');
@@ -73,68 +80,105 @@ describe('Integration tests', () => {
 		});
 	});
 
-	describe('POST /team', () => {
-		it('can create a new team', async done => {
-			const token = createJwtToken(CLIENT_ID);
-			const res = await request.post('/team')
-				.set('Authorization', token)
-				.send({
-					teamName: 'Seattle Seahawks',
-				});
-			expect(res.status).toBe(201);
-			done();
-		});
+	describe('/team', () => {
 
-		it('returns a 401 response for invalid bearer token', async done => {
-			const res = await request.post('/team')
-				.set('Authorization', 'Bearer invalid_token')
-				.send({
-					teamName: 'Seattle Seahawks',
-				});
-			expect(res.status).toBe(401);
-			done();
-		});
+		describe('POST /team', () => {
 
-		it('returns a 401 response for missing bearer token', async done => {
-			const res = await request.post('/team')
-				.send({
-					teamName: 'Seattle Seahawks',
-				});
-			expect(res.status).toBe(401);
-			done();
-		});
-	});
-
-	describe('GET /team', () => {
-		it('can get teams belonging to the correct clientId', async done => {
-			const seattleSeahawks = 'Seattle Seahawks'
-			await seedTeam({
-				clientId: CLIENT_ID,
-				teamName: seattleSeahawks,
+			it('can create a new team', async done => {
+				const token = createJwtToken(CLIENT_ID);
+				const res = await request.post('/team')
+					.set('Authorization', token)
+					.send({
+						teamName: 'Seattle Seahawks',
+					});
+				expect(res.status).toBe(201);
+				done();
 			});
-			const token = createJwtToken(CLIENT_ID);
-			const res = await request.get('/team')
-				.set('Authorization', token);
-			expect(res.status).toBe(200);
-			const [parsedResponse] = JSON.parse(res.text);
-			expect(parsedResponse.teamName).toBe(seattleSeahawks);
-			expect(Boolean(parsedResponse['_id'])).toBe(true);
-			expect(parsedResponse['clientId'].slice(0, 18)).toBe('leaderboard_client');
-			done();
+	
+			it('returns a 401 response for invalid bearer token', async done => {
+				const res = await request.post('/team')
+					.set('Authorization', 'Bearer invalid_token')
+					.send({
+						teamName: 'Seattle Seahawks',
+					});
+				expect(res.status).toBe(401);
+				done();
+			});
+	
+			it('returns a 401 response for missing bearer token', async done => {
+				const res = await request.post('/team')
+					.send({
+						teamName: 'Seattle Seahawks',
+					});
+				expect(res.status).toBe(401);
+				done();
+			});
 		});
 
-		it('returns a 401 response for missing bearer token', async done => {
-			const res = await request.get('/team');
-			expect(res.status).toBe(401);
-			done();
+		describe('GET /team', () => {
+
+			it('can get teams belonging to the correct clientId', async done => {
+				const seattleSeahawks = 'Seattle Seahawks'
+				await seedTeam({
+					clientId: CLIENT_ID,
+					teamName: seattleSeahawks,
+				});
+				const token = createJwtToken(CLIENT_ID);
+				const res = await request.get('/team')
+					.set('Authorization', token);
+				expect(res.status).toBe(200);
+				const [parsedResponse] = JSON.parse(res.text);
+				expect(parsedResponse.teamName).toBe(seattleSeahawks);
+				expect(Boolean(parsedResponse['_id'])).toBe(true);
+				expect(parsedResponse['clientId'].slice(0, 18)).toBe('leaderboard_client');
+				done();
+			});
+	
+			it('returns a 401 response for missing bearer token', async done => {
+				const res = await request.get('/team');
+				expect(res.status).toBe(401);
+				done();
+			});
+	
+			it('returns a 401 response for incorrect bearer token', async done => {
+				const res = await request.get('/team')
+					.set('Aythorization', 'some_wrong_token');
+				expect(res.status).toBe(401);
+				done();
+			});
 		});
 
-		it('returns a 401 response for incorrect bearer token', async done => {
-			const res = await request.get('/team')
-				.set('Aythorization', 'some_wrong_token');
-			expect(res.status).toBe(401);
-			done();
+		describe('DELETE /team/:id', () => {
+			it('can successfully delete a team', async done => {
+				const seattleSeahawks = 'Seattle Seahawks'
+				await seedTeam({
+					clientId: CLIENT_ID,
+					teamName: seattleSeahawks,
+				});
+				const token = createJwtToken(CLIENT_ID);
+				const teamId = await getTeamId(seattleSeahawks);
+				const res = await request.delete(`/team/${teamId}`)
+					.set('Authorization', token);
+				expect(res.status).toBe(204);
+				const teamsInDb = await getTeams(CLIENT_ID);
+				expect(teamsInDb.length).toBe(0);
+				done();
+			});
+
+			it('returns a 401 response for incorrect bearer token', async done => {
+				const res = await request.delete('/team/00000')
+					.set('Authorization', 'bad_token');
+				expect(res.status).toBe(401);
+				done();
+			});
+
+			it('returns a 401 response for missing bearer token', async done => {
+				const res = await request.delete('/team/00000');
+				expect(res.status).toBe(401);
+				done();
+			});
 		});
+
 	});
 
 });

@@ -59,8 +59,17 @@ function putTeam(req, res) {
   }
 }
 
-function deleteTeam(req, res) {
-  logger.info({ msg: `Received DELETE request` })
+async function deleteTeam(req, res) {
+	try {
+		const { teamId } = req.params;
+  	logger.info({ msg: `Received DELETE request for teamId ${teamId}` });
+		await db.deleteTeamById(teamId);
+		logger.info({ msg: `Successful deletion of teamId ${teamId}`});
+		return res.status(204).send();
+	} catch (error) {
+		console.trace(error);
+		res.status(500).json({ message: `An error occured ${error}`});
+	}
 }
 
 module.exports = {

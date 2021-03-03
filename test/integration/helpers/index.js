@@ -1,6 +1,6 @@
 const { SALT_LENGTH, CLIENT_ID_LENGTH } = require('../../../src/constants');
 const { generateApiKey, createClientId, createHash, createClientSecret } = require('../../../src/lib/apikey');
-const { addApiKey, addTeam } = require('../../../src/lib/database/utils');
+const { addApiKey, addTeam, getTeamByName, getTeams } = require('../../../src/lib/database/utils');
 const decode = require('jwt-decode');
 
 const USER_ID = '12345';
@@ -42,10 +42,21 @@ async function seedTeam(team) {
 	}
 }
 
+async function getTeamId(teamName) {
+	try {
+		const [team] = await getTeamByName(teamName)
+		return team._id;
+	} catch (error) {
+		console.trace(error);
+	}
+}
+
 module.exports = {
 	seedApiKey,
 	decodeJwt,
 	USER_ID,
 	CLIENT_ID,
 	seedTeam,
+	getTeamId,
+	getTeams,
 }

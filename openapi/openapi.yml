@@ -133,15 +133,17 @@ paths:
       operationId: deleteTeam
       x-eov-operation-id: deleteTeam
       x-eov-operation-handler: team
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: teamId
           schema:
-            type: integer
+            type: string
           required: true
           description: Numeric ID of the team to delete
       responses:
-        "201":
+        "204":
           description: Successful DELETE response
         "401":
           $ref: "#/components/responses/401"

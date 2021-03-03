@@ -28,6 +28,23 @@ async function getTeam(teamId) {
 	}
 }
 
+async function getTeamByName(teamName) {
+	try {
+		return await TeamModel.find({ teamName }).exec();
+	} catch (error) {
+		console.log('Error getting team')
+		console.log(error)
+	}
+}
+
+async function deleteTeamById(id) {
+	try {
+		return await TeamModel.findByIdAndDelete(id);
+	} catch (error) {
+		console.trace(error);
+	}
+}
+
 async function addUser(user) {
 	try {
 		return await UserModel.create(user)
@@ -88,6 +105,8 @@ module.exports = {
 	addTeam,
 	getTeams,
 	getTeam,
+	getTeamByName,
+	deleteTeamById,
 	addUser,
 	addApiKey,
 	findUserByEmail,
