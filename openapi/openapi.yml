@@ -185,6 +185,34 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
+  /leaderboard:
+    post:
+      description: Create leaderboards
+      operationId: createLeaderboard
+      x-eov-operation-id: createLeaderboard
+      x-eov-operation-handler: leaderboard
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: leaderboard schema
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postLeaderboardSchema"
+      responses:
+        "200":
+          description: Team created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postLeaderboardResponse"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
   /user/{userId}:
     get:
       description: Get all the users for a team
@@ -399,6 +427,32 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/teamSchema"
+    postLeaderboardSchema:
+      description: leaderboard schema
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - clientId
+      properties:
+        name:
+          type: string
+        clientId:
+          type: string
+    postLeaderboardResponse:
+      description: post leaderboard response
+      $ref: "#/components/schemas/leaderboardSchema"
+    leaderboardSchema:
+      type: object
+      additionalProperties: true
+      required:
+        - name
+        - clientId
+      properties:
+        name:
+          type: string
+        clientId:
+          type: string
     postTeamSchema:
       description: team schema
       type: object

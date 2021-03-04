@@ -1,6 +1,7 @@
 const { TeamModel } = require('../model/teams');
 const { UserModel } = require('../model/user');
 const { ApiKeyModel } = require('../model/apiKey');
+const { LeaderboardModel } = require('../model/leaderboard');
 
 async function addTeam(team) {
 	try {
@@ -109,6 +110,14 @@ function createClientSecret(length) {
 	return generateSalt(length)
 }
 
+async function createLeaderboard(leaderboard) {
+	try {
+		return await LeaderboardModel.create(leaderboard);
+	} catch (error) {
+		console.trace(error);
+	}
+}
+
 module.exports = {
 	addTeam,
 	getTeams,
@@ -123,4 +132,5 @@ module.exports = {
 	findApiKeyByTeamId,
 	findApiKeyByClientId,
 	createClientSecret,
+	createLeaderboard,
 }
