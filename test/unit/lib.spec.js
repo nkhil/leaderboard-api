@@ -1,7 +1,7 @@
 const { generateSalt, generateApiKey } = require('../../src/lib/apikey');
 
-describe('api key library functions', () => {
-	describe('generateSalt function', () => {
+describe('apiKey library helper functions', () => {
+	describe('#generateSalt', () => {
 		it('Creates a string of the right length', () => {
 			const result = generateSalt(5)
 			expect(result.length).toBe(5)
