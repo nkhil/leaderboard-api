@@ -22,7 +22,7 @@
 		"develop": "NODE_ENV=DEVELOPMENT nodemon --use_strict index.js",
 		"start": "node --use_strict index.js",
 		"app:docker": "docker-compose up --build app",
-		"test:docker": "sh test.sh",
+		"test:docker": "bash test.sh",
 		"mongo-local": "bash local.sh",
 		"local": "nodemon --use-strict src/.",
 		"dev": "npm run develop",
