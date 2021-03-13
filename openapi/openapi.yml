@@ -459,8 +459,11 @@ components:
       additionalProperties: false
       required:
         - teamName
+        - leaderboardId
       properties:
         teamName:
+          type: string
+        leaderboardId:
           type: string
     putTeamResponse:
       $ref: "#/components/schemas/teamSchema"
@@ -475,10 +478,15 @@ components:
       description: team schema
       type: object
       additionalProperties: true
+      required:
+        - teamName
+        - leaderboardId
       properties:
         teamName:
           type: string
         teamId:
+          type: string
+        leaderboardId:
           type: string
     postUserSchema:
       description: user schema

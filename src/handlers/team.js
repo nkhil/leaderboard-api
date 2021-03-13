@@ -20,6 +20,14 @@ async function createTeam(req, res) {
   }
 }
 
+function formatTeamResponse({ _id, teamName, leaderboardId}) {
+	return {
+		id: _id.toString(),
+		teamName,
+		leaderboardId: leaderboardId.toString(),
+	}
+}
+
 async function getTeam(req, res) {
   try {
     logger.info({ msg: `TEA02_01: Received GET team req` })
@@ -37,6 +45,7 @@ async function getTeam(req, res) {
         return res.status(400).send();
       }
       teams = await db.getTeam(teamId);
+			teams = formatTeamResponse(teams);
       if (!teams || teams.length === 0) {
         logger.info({ msg: `TEA01_05: no team found for given teamId` })
         return res.status(400).send();
@@ -68,7 +77,8 @@ async function putTeam(req, res) {
 		}
 		const teamInReq = req.body;
 		const newTeam = { team, ...teamInReq };
-		const result = await db.updateTeamById(teamId, newTeam);
+		const dbResponse = await db.updateTeamById(teamId, newTeam);
+		const result = formatTeamResponse(dbResponse);
 		res.status(201).json(result);
   } catch (error) {
 		console.trace(error);

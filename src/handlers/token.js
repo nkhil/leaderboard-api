@@ -1,7 +1,7 @@
 var jwt = require('jsonwebtoken');
 const logger = require('pino')();
 
-function createJwtToken(clientId) {
+function createToken(clientId) {
 	const token = jwt.sign(
 		{ clientId },
 		'secret',
@@ -16,7 +16,7 @@ function createJwtToken(clientId) {
 async function generateToken(req, res) {
 	const clientId = req.headers['x-client-id'];
 	logger.info({ msg: `Generating token for clientId ${clientId}` })
-	const authToken = createJwtToken(clientId);
+	const authToken = createToken(clientId);
 	logger.info({ msg: `authToken generated` });
 	res.setHeader('Set-Cookie', [`authToken=${authToken}; HttpOnly`]);
 	res.status(200).json({ authToken });
@@ -24,5 +24,5 @@ async function generateToken(req, res) {
 
 module.exports = {
 	generateToken,
-	createJwtToken,
+	createToken,
 }
