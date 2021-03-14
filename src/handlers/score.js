@@ -36,6 +36,12 @@ function normaliseAddAndSubtract(scores) {
 	return scores.map(normaliseSingleScore);
 }
 
+function allTeamsBelongToLeaderboard(leaderboardId, teams) {
+	return teams.every(team => {
+		return team.leaderboardId.toString() === leaderboardId
+	});
+}
+
 async function postScores(req, res) {
 	try {
 		const { leaderboardId } = req.params; // TODO: make sure the request isn't asking for data from teams that don't belong to this leaderboard
@@ -43,6 +49,11 @@ async function postScores(req, res) {
 		const normalisedScores = normaliseAddAndSubtract(scores);
 		const teamIds = normalisedScores.map(team => team.teamId)
 		const teams = await db.getTeamsById(teamIds);
+		if (!allTeamsBelongToLeaderboard(leaderboardId, teams)) {
+			return res.status(400).json({
+				message: 'Team Ids provided do not belong to leaderboardId'
+			});
+		};
 		const updatedTeams = teams.reduce((acc, team) => {
 			const [{ add, subtract }] = normalisedScores.filter(t => t.teamId === team._id.toString());
 			const updatedScore = team.score + add - subtract;
@@ -56,7 +67,7 @@ async function postScores(req, res) {
 		await db.updateTeamScoresById(updatedTeams);
 		const newlyUpdatedTeams = await db.getTeamsById(teamIds);
 		const formattedResponse = formatScoresResponse(newlyUpdatedTeams);
-		res.status(201).json(formattedResponse);
+		return res.status(201).json(formattedResponse);
 	} catch (error) {
 		logger.error({ msg: `Error posting scores. Error: ${JSON.stringify(error)}` });
 	}
@@ -65,4 +76,5 @@ async function postScores(req, res) {
 module.exports = {
 	postScores,
 	normaliseAddAndSubtract,
+	allTeamsBelongToLeaderboard
 }

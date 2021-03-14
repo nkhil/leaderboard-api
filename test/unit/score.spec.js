@@ -1,4 +1,7 @@
-const { normaliseAddAndSubtract } = require('../../src/handlers/score');
+const { 
+	normaliseAddAndSubtract, 
+	allTeamsBelongToLeaderboard,
+} = require('../../src/handlers/score');
 
 describe('score', () => {
 	describe('#normaliseAddAndSubtract', () => {
@@ -36,6 +39,25 @@ describe('score', () => {
 			expect(result[0].subtract).toBe(0)
 		});
 
+	});
+
+	describe('#allTeamsBelongToLeaderboard', () => {
+
+		it('returns true if all teams belong to the leaderboard', () => {
+			const leaderboardId = '12345';
+			const teams = [{ leaderboardId: '12345'}, { leaderboardId: '12345' }];
+			expect(
+				allTeamsBelongToLeaderboard(leaderboardId, teams)
+				).toBe(true);
+		});
+
+		it('returns false if all teams do not belong to the leaderboard', () => {
+			const leaderboardId = '12345';
+			const teams = [{ leaderboardId: '12345'}, { leaderboardId: '' }];
+			expect(
+				allTeamsBelongToLeaderboard(leaderboardId, teams)
+				).toBe(false);
+		});
 	});
 
 });
