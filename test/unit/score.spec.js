@@ -9,9 +9,9 @@ describe('score', () => {
 					add: 1,
 				}
 			];
-			normaliseAddAndSubtract(scores);
-			expect(scores[0].add).toBe(1)
-			expect(scores[0].subtract).toBe(0)
+			const result = normaliseAddAndSubtract(scores);
+			expect(result[0].add).toBe(1)
+			expect(result[0].subtract).toBe(0)
 		});
 
 		it('Can normalise a score with missing add', () => {
@@ -20,9 +20,9 @@ describe('score', () => {
 					subtract: 1,
 				}
 			];
-			normaliseAddAndSubtract(scores);
-			expect(scores[0].add).toBe(0)
-			expect(scores[0].subtract).toBe(1)
+			const result = normaliseAddAndSubtract(scores);
+			expect(result[0].add).toBe(0)
+			expect(result[0].subtract).toBe(1)
 		});
 
 		it('Can normalise a score with missing add and subtract properties', () => {
@@ -31,9 +31,9 @@ describe('score', () => {
 					foo: 'bar',
 				}
 			];
-			normaliseAddAndSubtract(scores);
-			expect(scores[0].add).toBe(0)
-			expect(scores[0].subtract).toBe(0)
+			const result = normaliseAddAndSubtract(scores);
+			expect(result[0].add).toBe(0)
+			expect(result[0].subtract).toBe(0)
 		});
 
 	});

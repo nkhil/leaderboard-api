@@ -16,12 +16,21 @@ function formatScoresResponse(teams) {
 function normaliseAddAndSubtract(scores) {
 	const normaliseSingleScore = score => {
 		if (typeof score.add !== 'number' && typeof score.subtract !== 'number') {
-			score.add = 0;
-			score.subtract = 0;
+			return {
+				...score,
+				add: 0,
+				subtract: 0
+			}
 		} else if (typeof score.add === 'number') {
-			score.subtract = 0;
+			return {
+				...score,
+				subtract: 0,
+			}
 		} else if (typeof score.subtract === 'number') {
-			score.add = 0;
+			return {
+				...score,
+				add: 0,
+			}
 		}
 	} 
 	return scores.map(normaliseSingleScore);
@@ -31,11 +40,11 @@ async function postScores(req, res) {
 	try {
 		const { leaderboardId } = req.params; // TODO: make sure the request isn't asking for data from teams that don't belong to this leaderboard
 		const { scores } = req.body;
-		normaliseAddAndSubtract(scores);
-		const teamIds = scores.map(team => team.teamId)
+		const normalisedScores = normaliseAddAndSubtract(scores);
+		const teamIds = normalisedScores.map(team => team.teamId)
 		const teams = await db.getTeamsById(teamIds);
 		const updatedTeams = teams.reduce((acc, team) => {
-			const [{ add, subtract }] = scores.filter(t => t.teamId === team._id.toString());
+			const [{ add, subtract }] = normalisedScores.filter(t => t.teamId === team._id.toString());
 			const updatedScore = team.score + add - subtract;
 			const updatedTeam = {
 				...team.toObject(),
