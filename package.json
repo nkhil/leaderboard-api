@@ -1,5 +1,5 @@
 {
-	"name": "scoring-api",
+	"name": "leaderboard-api",
 	"version": "1.1.0",
 	"description": "Boilerplate repository to setup swagger 3.0",
 	"main": "index.js",
