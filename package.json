@@ -24,7 +24,7 @@
 		"app:docker": "docker-compose up --build app",
 		"test:docker": "bash test.sh",
 		"mongo-local": "bash local.sh",
-		"local": "nodemon --use-strict src/.",
+		"local": "nodemon --use-strict index.js",
 		"dev": "npm run develop",
 		"release": "standard-version"
 	},

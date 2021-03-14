@@ -7,6 +7,7 @@ const {
 	decodeJwt, 
 	getTeamId,
 	getTeams, 
+	getTeam,
 	CLIENT_ID,
 } = require('./helpers');
 const { ApiKeyModel } = require('../../src/lib/model/apiKey');
@@ -96,12 +97,10 @@ describe('Integration tests', () => {
 					.set('Authorization', token)
 					.send({
 						name: LEADERBOARD_NAME,
-						clientId: CLIENT_ID,
 					});
 				expect(res.status).toBe(200);
 				const parsedResponse = JSON.parse(res.text);
 				expect(parsedResponse.name).toBe(LEADERBOARD_NAME);
-				expect(parsedResponse.clientId).toBe(CLIENT_ID);
 				done();
 			});
 	
@@ -111,7 +110,6 @@ describe('Integration tests', () => {
 					.set('Authorization', token)
 					.send({
 						name: LEADERBOARD_NAME,
-						clientId: CLIENT_ID,
 						someWrongProp: 'foo',
 					});
 				expect(res.status).toBe(400);
@@ -123,7 +121,6 @@ describe('Integration tests', () => {
 				const res = await request.post('/leaderboard')
 					.set('Authorization', token)
 					.send({
-						name: LEADERBOARD_NAME,
 					});
 				expect(res.status).toBe(400);
 				done();
@@ -331,5 +328,38 @@ describe('Integration tests', () => {
 			});
 		});
 	});
+
+	describe('Score routes 1️⃣ 2️⃣ 3️⃣', () => {
+
+		it('can record team scores', async done => {
+			const { _id: leaderboardId } = await createLeaderboard({
+				name: LEADERBOARD_NAME,
+				clientId: CLIENT_ID,
+			});
+			const { _id: teamId } = await seedTeam({
+				clientId: CLIENT_ID,
+				teamName: SOME_TEAM_NAME,
+				leaderboardId,
+			});
+			const token = getToken(CLIENT_ID);
+			const NUM = 5;
+			const res = await request.post(`/score/leaderboard/${leaderboardId}`)
+					.set('Authorization', token)
+					.send({
+						scores: [
+							{
+								teamId,
+								add: NUM,
+								// subtract: 0,
+							}
+						]
+					});
+			expect(res.status).toBe(201);
+			const team = await getTeam(teamId)
+			expect(team.score).toBe(NUM)
+			done()
+		})
+
+	})
 });
 

@@ -37,6 +37,14 @@ async function getTeamByName(teamName) {
 		console.log(error)
 	}
 }
+async function getTeamsById(teamIdArray) {
+	try {
+		return await TeamModel.find().where('_id').in(teamIdArray).exec();
+	} catch (error) {
+		console.log('Error getting team')
+		console.log(error)
+	}
+}
 
 async function deleteTeamById(id) {
 	try {
@@ -49,6 +57,22 @@ async function deleteTeamById(id) {
 async function updateTeamById(id, team) {
 	try {
 		return await TeamModel.findByIdAndUpdate(id, team);
+	} catch (error) {
+		console.trace(error);
+	}
+}
+
+async function updateTeamScoresById(teams) {
+	try {
+		const promises = [];
+		teams.forEach(team => {
+			const promise = TeamModel.updateOne(
+				{ _id: team._id },
+				{ $set: { score: team.score } },
+			);
+			promises.push(promise);
+		});
+		return await Promise.all(promises);
 	} catch (error) {
 		console.trace(error);
 	}
@@ -125,6 +149,8 @@ module.exports = {
 	getTeamByName,
 	deleteTeamById,
 	updateTeamById,
+	updateTeamScoresById,
+	getTeamsById,
 	addUser,
 	addApiKey,
 	findUserByEmail,

@@ -20,11 +20,24 @@ async function createTeam(req, res) {
   }
 }
 
-function formatTeamResponse({ _id, teamName, leaderboardId}) {
-	return {
-		id: _id.toString(),
-		teamName,
-		leaderboardId: leaderboardId.toString(),
+function formatTeamResponse(teams) {
+	const teamsAreArray = Array.isArray(teams);
+
+	const formatSingleTeamResponse = team => {
+		const { _id, teamName, leaderboardId, score } = team;
+		return {
+			id: _id.toString(),
+			teamName,
+			leaderboardId: leaderboardId.toString(),
+			score,
+		}
+	}
+
+	if (!teamsAreArray) {
+		return formatSingleTeamResponse(teams);
+	} else if(teamsAreArray) {
+		const response = teams.map(t => formatSingleTeamResponse(t));
+		return response;
 	}
 }
 
@@ -36,7 +49,8 @@ async function getTeam(req, res) {
     let teams;
     if (!teamId) {
       logger.info({ msg: `TEA02_02: No teamId found in params, retrieving all teams` })
-      teams = await db.getTeams(clientId)
+      teams = await db.getTeams(clientId);
+			teams = formatTeamResponse(teams);
     } else {
       logger.info({ msg: `TEA01_03: teamId supplied in params. Getting team` })
       const teamIdIsValidObjectId = objectIdIsValid(teamId);

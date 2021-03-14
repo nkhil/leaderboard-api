@@ -1,6 +1,6 @@
 const { SALT_LENGTH, CLIENT_ID_LENGTH } = require('../../../src/constants');
 const { generateApiKey, createClientId, createHash, createClientSecret } = require('../../../src/lib/apikey');
-const { addApiKey, addTeam, getTeamByName, getTeams } = require('../../../src/lib/database/utils');
+const { addApiKey, addTeam, getTeamByName, getTeams, getTeam } = require('../../../src/lib/database/utils');
 const decode = require('jwt-decode');
 
 const USER_ID = '12345';
@@ -59,4 +59,5 @@ module.exports = {
 	seedTeam,
 	getTeamId,
 	getTeams,
+	getTeam,
 }

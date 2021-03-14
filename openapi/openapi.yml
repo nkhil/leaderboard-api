@@ -293,6 +293,41 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
+  /score/leaderboard/{leaderboardId}:
+    post:
+      security:
+        - bearerAuth: []
+      description: post scores for teams in a leaderboard
+      operationId: postScores
+      x-eov-operation-id: postScores
+      x-eov-operation-handler: score
+      parameters:
+        - in: path
+          name: leaderboardId
+          schema:
+            type: string
+          required: true
+          description: Numeric ID of the leaderboard
+      requestBody:
+        description: team schema
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postScoreSchema"
+      responses:
+        "201":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/postScoreResponse"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
   /account:
     get:
       description: Account
@@ -433,11 +468,8 @@ components:
       additionalProperties: false
       required:
         - name
-        - clientId
       properties:
         name:
-          type: string
-        clientId:
           type: string
     postLeaderboardResponse:
       description: post leaderboard response
@@ -447,11 +479,8 @@ components:
       additionalProperties: true
       required:
         - name
-        - clientId
       properties:
         name:
-          type: string
-        clientId:
           type: string
     postTeamSchema:
       description: team schema
@@ -488,6 +517,46 @@ components:
           type: string
         leaderboardId:
           type: string
+    postScoreSchema:
+      description: Post body for team scores
+      type: object
+      required:
+        - scores
+      properties:
+        scores:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - teamId
+            properties:
+              teamId:
+                type: string
+              add:
+                type: number
+              subtract:
+                type: number
+    postScoreResponse:
+      description: post score response schema
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+        required:
+          - id
+          - score
+          - teamName
+          - leaderboardId
+        properties:
+          id:
+            type: string
+          score:
+            type: number
+          teamName:
+            type: string
+          leaderboardId:
+            type: string
     postUserSchema:
       description: user schema
       type: array
