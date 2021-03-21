@@ -1,5 +1,6 @@
 const db = require('../lib/database/utils')
 const logger = require('pino')()
+const { arrayHasProps } = require('../helpers/array-has-prop');
 
 function formatScoresResponse(teams) {
 	const formatSingleTeam = ({ score, _id, teamName, leaderboardId }) => {
@@ -36,12 +37,6 @@ function normaliseAddAndSubtract(scores) {
 	return scores.map(normaliseSingleScore);
 }
 
-function allTeamsBelongToLeaderboard(leaderboardId, teams) {
-	return teams.every(team => {
-		return team.leaderboardId.toString() === leaderboardId
-	});
-}
-
 async function postScores(req, res) {
 	try {
 		const { leaderboardId } = req.params; // TODO: make sure the request isn't asking for data from teams that don't belong to this leaderboard
@@ -49,7 +44,7 @@ async function postScores(req, res) {
 		const normalisedScores = normaliseAddAndSubtract(scores);
 		const teamIds = normalisedScores.map(team => team.teamId)
 		const teams = await db.getTeamsById(teamIds);
-		if (!allTeamsBelongToLeaderboard(leaderboardId, teams)) {
+		if (!arrayHasProps(teams, 'leaderboardId', leaderboardId)) {
 			return res.status(400).json({
 				message: 'Team Ids provided do not belong to leaderboardId'
 			});
@@ -76,5 +71,4 @@ async function postScores(req, res) {
 module.exports = {
 	postScores,
 	normaliseAddAndSubtract,
-	allTeamsBelongToLeaderboard
 }
