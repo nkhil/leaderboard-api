@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const teamsSchema = new mongoose.Schema({
   teamName: { type: String, required: true, index: { unique: true } },
   clientId: { type: String, required: true },
-	leaderboardId: { type: mongoose.Schema.Types.ObjectId, ref: 'Leaderboard'},
-	score: { type: Number, default: 0 },
+  leaderboardId: { type: mongoose.Schema.Types.ObjectId, ref: 'Leaderboard' },
+  score: { type: Number, default: 0 },
 });
 
 module.exports = {
@@ -14,4 +14,4 @@ module.exports = {
     'teams',
   ),
   teamsSchema,
-}
+};

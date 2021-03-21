@@ -6,4 +6,4 @@ function objectIdIsValid(objectId) {
 
 module.exports = {
   objectIdIsValid,
-}
+};

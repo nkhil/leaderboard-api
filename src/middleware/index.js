@@ -4,4 +4,4 @@ const { verifyToken } = require('./verifyToken');
 module.exports = {
   verifyApiKey,
   verifyToken,
-}
+};

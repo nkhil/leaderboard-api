@@ -1,5 +1,5 @@
 const { name } = require('../package.json');
-require('dotenv').config()
+require('dotenv').config();
 
 module.exports = {
   name,
