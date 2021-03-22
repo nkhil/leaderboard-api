@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const { generateSalt, generateApiKey } = require('../../src/lib/apikey');
 
 describe('apiKey library helper functions', () => {
