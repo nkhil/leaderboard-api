@@ -13,6 +13,7 @@ const {
   getTeamByName,
   getTeams,
   getTeam,
+  addUserCreds,
 } = require('../../../src/lib/database/utils');
 
 const USER_ID = '12345';
@@ -35,6 +36,23 @@ async function seedApiKey(userIdentifier) {
     clientId,
     clientSecret,
     apiKey,
+  };
+}
+
+async function seedUserCreds(userIdentifier) {
+  const userId = userIdentifier || USER_ID;
+  const clientId = CLIENT_ID;
+  const clientSecret = createClientSecret(SALT_LENGTH);
+  const clientSecretHash = createHash(clientSecret);
+  const entry = {
+    userId,
+    clientId,
+    clientSecretHash,
+  };
+  await addUserCreds(entry);
+  return {
+    clientId,
+    clientSecret,
   };
 }
 
@@ -61,4 +79,5 @@ module.exports = {
   getTeamId,
   getTeams,
   getTeam,
+  seedUserCreds,
 };

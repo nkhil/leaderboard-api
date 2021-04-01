@@ -1,8 +1,9 @@
+/* eslint-disable no-undef */
 const supertest = require('supertest');
 const init = require('../../src');
 const database = require('../../src/lib/database');
 const {
-  seedApiKey,
+  seedUserCreds,
   seedTeam,
   decodeJwt,
   getTeamId,
@@ -57,11 +58,10 @@ describe('Integration tests', () => {
   describe('Token routes 🎟️', () => {
     describe('GET /token', () => {
       it('returns a valid token with the right credentials', async (done) => {
-        const { clientId, clientSecret, apiKey } = await seedApiKey();
+        const { clientId, clientSecret } = await seedUserCreds();
         const res = await request.get('/token')
           .set('x-client-id', clientId)
-          .set('x-client-secret', clientSecret)
-          .set('x-api-key', apiKey);
+          .set('x-client-secret', clientSecret);
         expect(res.status).toBe(200);
         const parsedResponse = JSON.parse(res.text);
         const { clientId: id } = decodeJwt(parsedResponse.authToken);

@@ -1,7 +1,20 @@
 const { TeamModel } = require('../model/teams');
+const { UserCredentialModel } = require('../model/userCredentials');
 const { UserModel } = require('../model/user');
 const { ApiKeyModel } = require('../model/apiKey');
 const { LeaderboardModel } = require('../model/leaderboard');
+
+function findUserCredsByClientId(clientId) {
+  return UserCredentialModel.find({ clientId }).exec();
+}
+
+async function addUserCreds({ clientId, userId, clientSecretHash }) {
+  return UserCredentialModel.create({
+    clientId,
+    userId,
+    clientSecretHash,
+  });
+}
 
 async function addTeam(team) {
   try {
@@ -121,9 +134,9 @@ async function findApiKeyByTeamId(teamId) {
   }
 }
 
-async function findApiKeyByClientId(clientId, apiKey) {
+async function findApiKeyByClientId(clientId) {
   try {
-    return await ApiKeyModel.find({ clientId, apiKey });
+    return await ApiKeyModel.find({ clientId });
   } catch (error) {
     console.log('🚀 ~ file: utils.js ~ line 79 ~ findApiKeyByUserId ~ error', error);
     console.log('/n Error findApiKeyByUserId');
@@ -159,4 +172,6 @@ module.exports = {
   findApiKeyByClientId,
   createClientSecret,
   createLeaderboard,
+  findUserCredsByClientId,
+  addUserCreds,
 };

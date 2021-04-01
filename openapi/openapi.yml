@@ -40,7 +40,6 @@ paths:
       x-eov-operation-id: generateToken
       x-eov-operation-handler: token
       parameters:
-        - $ref: "#/components/parameters/apiKey"
         - $ref: "#/components/parameters/clientId"
         - $ref: "#/components/parameters/clientSecret"
       responses:
@@ -213,54 +212,6 @@ paths:
           $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
-  /user/{userId}:
-    get:
-      description: Get all the users for a team
-      operationId: getUser
-      x-eov-operation-id: getUser
-      x-eov-operation-handler: user
-      parameters:
-        - in: path
-          name: userId
-          schema:
-            type: integer
-          required: true
-          description: Numeric ID of the user
-      responses:
-        "200":
-          description: A list of users
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/userSchema"
-        "401":
-          $ref: "#/components/responses/401"
-        "404":
-          $ref: "#/components/responses/404"
-        "500":
-          $ref: "#/components/responses/500"
-  /users:
-    post:
-      description: Create a new user
-      operationId: createUser
-      x-eov-operation-id: createUser
-      x-eov-operation-handler: user
-      requestBody:
-        description: user schema
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/postUserSchema"
-      responses:
-        "201":
-          description: OK
-        "401":
-          $ref: "#/components/responses/401"
-        "404":
-          $ref: "#/components/responses/404"
-        "500":
-          $ref: "#/components/responses/500"
   /sign-s3:
     get:
       description: get signed Url
@@ -352,7 +303,7 @@ components:
     verifyApiKey:
       type: apiKey
       in: header
-      name: x-api-key
+      name: x-client-id
     bearerAuth:
       type: http
       scheme: bearer
