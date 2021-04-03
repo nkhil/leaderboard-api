@@ -6,6 +6,8 @@ COPY src src
 COPY openapi openapi
 COPY index.js index.js
 ENV PORT=8080
+ARG MONGO_CONNECTION_STRING
+ENV MONGO_CONNECTION_STRING=$MONGO_CONNECTION_STRING
 
 # test step
 FROM base as test
