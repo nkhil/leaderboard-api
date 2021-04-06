@@ -3,15 +3,28 @@ const cors = require('cors');
 const path = require('path');
 const OpenApiValidator = require('express-openapi-validator');
 const bodyParser = require('body-parser');
+const rateLimit = require('express-rate-limit');
 const database = require('./lib/database');
 const middleware = require('./middleware');
 
 const app = express();
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests
+});
+
+// If there is no limit on the size of requests,
+// attackers can send requests with large request bodies
+// that can exhaust server memory and/or fill disk space.
+// For more: https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html
+app.use(express.json({ limit: '1kb' }));
+
 const apiSpec = path.join(__dirname, '../openapi/openapi.yml');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.text());
 app.use(bodyParser.json());
+app.use(limiter);
 app.use('/swagger', express.static(apiSpec));
 app.use(cors());
 app.use(express.json());
