@@ -25,6 +25,10 @@ async function addTeam(team) {
   }
 }
 
+function countClientRequests({ clientId }) {
+  
+}
+
 async function getTeams(clientId) {
   try {
     return await TeamModel.find({ clientId }).exec();

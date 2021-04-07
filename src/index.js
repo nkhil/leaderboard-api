@@ -5,6 +5,7 @@ const OpenApiValidator = require('express-openapi-validator');
 const bodyParser = require('body-parser');
 const database = require('./lib/database');
 const middleware = require('./middleware');
+const { countRequests } = require('./helpers/countRequests');
 
 const app = express();
 
@@ -16,6 +17,15 @@ app.use('/swagger', express.static(apiSpec));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use((req, res, next) => {
+  res.on('finish', () => {
+    countRequests({
+      request: req,
+      statusCode: res.statusCode,
+    });
+  });
+  next();
+});
 
 async function init() {
   await database.connect();

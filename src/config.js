@@ -8,4 +8,8 @@ module.exports = {
     maxLimit: 100,
     connectionString: process.env.MONGO_CONNECTION_STRING,
   },
+  ROUTES_TO_IGNORE: [
+    '/liveness',
+    '/swagger',
+  ],
 };
