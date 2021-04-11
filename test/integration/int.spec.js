@@ -16,6 +16,7 @@ const { createToken: getToken } = require('../../src/handlers/token');
 const { TeamModel } = require('../../src/lib/model/teams');
 const { LeaderboardModel } = require('../../src/lib/model/leaderboard');
 const { createLeaderboard } = require('../../src/lib/database/utils');
+const { UserCredentialModel } = require('../../src/lib/model/userCredentials');
 
 const SOME_TEAM_NAME = 'Seattle Seahawks';
 const LEADERBOARD_NAME = 'Average Joes';
@@ -28,6 +29,7 @@ describe('Integration tests', () => {
     await LeaderboardModel.deleteMany({});
     await ApiKeyModel.deleteMany({});
     await TeamModel.deleteMany({});
+    await UserCredentialModel.deleteMany({});
     request = supertest(app);
   });
 
@@ -35,6 +37,7 @@ describe('Integration tests', () => {
     await LeaderboardModel.deleteMany({});
     await ApiKeyModel.deleteMany({});
     await TeamModel.deleteMany({});
+    await UserCredentialModel.deleteMany({});
   });
 
   afterAll(async (done) => {
@@ -42,6 +45,7 @@ describe('Integration tests', () => {
     await ApiKeyModel.deleteMany({});
     await TeamModel.deleteMany({});
     await database.disconnect();
+    await UserCredentialModel.deleteMany({});
     done();
   });
 
