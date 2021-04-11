@@ -43,7 +43,7 @@ async function seedUserCreds(userIdentifier) {
   const userId = userIdentifier || USER_ID;
   const clientId = CLIENT_ID;
   const clientSecret = createClientSecret(SALT_LENGTH);
-  const clientSecretHash = createHash(clientSecret);
+  const clientSecretHash = await createHash(clientSecret);
   const entry = {
     userId,
     clientId,

@@ -17,8 +17,10 @@ describe('apiKey library helper functions', () => {
   });
 
   describe('#generateApiKey', () => {
-    it('throws an error if no params provided', () => {
-      expect(() => generateApiKey()).toThrow('API Key length not defined.');
+    it('can create an api key', () => {
+      const apiKey = generateApiKey(30);
+      expect(typeof apiKey).toBe('string');
+      expect(apiKey.length).toBe(30);
     });
   });
 });
