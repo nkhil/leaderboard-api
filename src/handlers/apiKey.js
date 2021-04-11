@@ -43,7 +43,7 @@ async function getApiKey(req, res) {
     if (apiKeyAlreadyExists) {
       return res.status(400).json({ msg: `API key already exists for teamId ${teamId}` });
     }
-    const hash = createHash(apiKey);
+    const hash = await createHash(apiKey);
     const salt = generateSalt(SALT_LENGTH);
     await addApiKey({ apiKeyHash: hash, salt, teamId });
     return res.status('200').json({ apiKey: salt + apiKey });

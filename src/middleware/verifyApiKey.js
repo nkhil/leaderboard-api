@@ -21,7 +21,7 @@ async function verifyApiKey(req) {
       return false;
     }
     const [{ clientSecretHash }] = userCreds;
-    const clientSecretIsValid = validateHash(clientSecretHash, clientSecret);
+    const clientSecretIsValid = await validateHash(clientSecretHash, clientSecret);
     if (!clientSecretIsValid) {
       logger.info({ msg: 'OP001_03: Client secret is invalid' });
       return false;

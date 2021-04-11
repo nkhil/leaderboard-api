@@ -1,14 +1,12 @@
-const secretHelper = require('@subgeniuscorp/secret-helper');
+const sh = require('@subgeniuscorp/secret-helper');
 const { SALT_LENGTH } = require('../../constants');
 
-const sh = secretHelper({ saltLength: SALT_LENGTH });
-
 function generateSalt() {
-  return sh.generateSalt();
+  return sh.generateSalt({ length: SALT_LENGTH });
 }
 
 function createHash(str) {
-  return sh.createHash(str);
+  return sh.createHash({ valueToHash: str });
 }
 
 function validateHash(hash, valueFromRequest) {
