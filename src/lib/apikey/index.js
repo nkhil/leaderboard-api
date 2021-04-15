@@ -1,9 +1,7 @@
 const sh = require('@subgeniuscorp/secret-helper');
-const { SALT_LENGTH, API_KEY_LENGTH } = require('../../constants');
 
-function generateSalt(length = 0) {
-  const realLength = length || SALT_LENGTH;
-  return sh.generateSalt({ length: realLength });
+function generateSalt() {
+  return sh.generateSalt();
 }
 
 function createHash(str) {
@@ -17,20 +15,11 @@ function validateHash(hash, valueFromRequest) {
   });
 }
 
-function generateApiKey(length = 0) {
-  const realLength = length || API_KEY_LENGTH;
-  if (!realLength) throw new Error('API Key length not defined.');
-  return sh.generateApiKey({
-    length: realLength,
-  });
-}
-
-function createClientSecret(length) {
-  return generateSalt(length);
+function createClientSecret() {
+  return generateSalt();
 }
 
 module.exports = {
-  generateApiKey,
   createHash,
   validateHash,
   generateSalt,

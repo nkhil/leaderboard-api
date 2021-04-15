@@ -30,6 +30,7 @@ async function getTeams(clientId) {
     return await TeamModel.find({ clientId }).exec();
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }
 
@@ -39,6 +40,7 @@ async function getTeam(teamId) {
   } catch (error) {
     console.log('Error getting team');
     console.log(error);
+    throw error;
   }
 }
 
@@ -48,6 +50,7 @@ async function getTeamByName(teamName) {
   } catch (error) {
     console.log('Error getting team');
     console.log(error);
+    throw error;
   }
 }
 async function getTeamsById(teamIdArray) {
@@ -56,6 +59,7 @@ async function getTeamsById(teamIdArray) {
   } catch (error) {
     console.log('Error getting team');
     console.log(error);
+    throw error;
   }
 }
 
@@ -64,6 +68,7 @@ async function deleteTeamById(id) {
     return await TeamModel.findByIdAndDelete(id);
   } catch (error) {
     console.trace(error);
+    throw error;
   }
 }
 
@@ -72,6 +77,7 @@ async function updateTeamById(id, team) {
     return await TeamModel.findByIdAndUpdate(id, team);
   } catch (error) {
     console.trace(error);
+    throw error;
   }
 }
 
@@ -88,6 +94,7 @@ async function updateTeamScoresById(teams) {
     return await Promise.all(promises);
   } catch (error) {
     console.trace(error);
+    throw error;
   }
 }
 
@@ -123,6 +130,7 @@ async function findApiKeyHashBySalt(salt) {
     return await ApiKeyModel.find({ salt });
   } catch (error) {
     console.log('findApiKeyHashBySalt -> error', error);
+    throw error;
   }
 }
 
@@ -131,6 +139,7 @@ async function findApiKeyByTeamId(teamId) {
     return await ApiKeyModel.find({ teamId });
   } catch (error) {
     console.log('findApiKeyByTeamId -> error', error);
+    throw error;
   }
 }
 
@@ -140,11 +149,8 @@ async function findApiKeyByClientId(clientId) {
   } catch (error) {
     console.log('🚀 ~ file: utils.js ~ line 79 ~ findApiKeyByUserId ~ error', error);
     console.log('/n Error findApiKeyByUserId');
+    throw error;
   }
-}
-
-function createClientSecret(length) {
-  return generateSalt(length);
 }
 
 async function createLeaderboard(leaderboard) {
@@ -152,6 +158,7 @@ async function createLeaderboard(leaderboard) {
     return await LeaderboardModel.create(leaderboard);
   } catch (error) {
     console.trace(error);
+    throw error;
   }
 }
 
@@ -170,7 +177,6 @@ module.exports = {
   findApiKeyHashBySalt,
   findApiKeyByTeamId,
   findApiKeyByClientId,
-  createClientSecret,
   createLeaderboard,
   findUserCredsByClientId,
   addUserCreds,
