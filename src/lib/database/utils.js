@@ -86,6 +86,7 @@ async function updateTeamScoresById(teams) {
     const promises = [];
     teams.forEach((team) => {
       const promise = TeamModel.updateOne(
+        // eslint-disable-next-line no-underscore-dangle
         { _id: team._id },
         { $set: { score: team.score } },
       );
