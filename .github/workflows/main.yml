@@ -37,6 +37,7 @@ jobs:
           usedocker: true
           docker_build_args: |
             MONGO_CONNECTION_STRING
+            TOKEN_SECRET
         env:
           MONGO_CONNECTION_STRING: ${{ secrets.MONGO_CONNECTION_STRING }}
           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
