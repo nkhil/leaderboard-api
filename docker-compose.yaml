@@ -19,6 +19,7 @@ services:
       - mongo
     environment:
       MONGO_CONNECTION_STRING: mongodb://mongo/scoring-api?retryWrites=true&w=majority
+      TOKEN_SECRET: $TOKEN_SECRET
     command: node --use_strict src/index.js
   test:
     build:
@@ -29,6 +30,7 @@ services:
       - app
     environment:
       MONGO_CONNECTION_STRING: mongodb://mongo/booksdb?retryWrites=true&w=majority
+      TOKEN_SECRET: $TOKEN_SECRET
     command: npm test
     volumes:
       - ./:/app
