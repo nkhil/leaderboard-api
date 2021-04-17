@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm run test:docker
+        with:
+          docker_build_args: |
+              TOKEN_SECRET
         env:
           MONGO_CONNECTION_STRING: ${{ secrets.MONGO_CONNECTION_STRING }}
           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
