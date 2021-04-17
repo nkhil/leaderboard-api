@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const logger = require('pino')();
+const { tokenSecret } = require('../config');
 
 function extractToken(req) {
   if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
@@ -14,7 +15,7 @@ function verifyToken(req) {
   try {
     logger.info({ msg: 'Verifying bearer token' });
     const bearerToken = extractToken(req);
-    const token = jwt.verify(bearerToken, 'secret');
+    const token = jwt.verify(bearerToken, tokenSecret);
     logger.info({ msg: 'Token verified succcessfully' });
     req.clientId = token.clientId;
     return true;

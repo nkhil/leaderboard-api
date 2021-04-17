@@ -1,13 +1,14 @@
 const logger = require('pino')();
 const jwt = require('jsonwebtoken');
+const { tokenSecret } = require('../config');
 
 function createToken(clientId) {
   const token = jwt.sign(
     { clientId },
-    'secret',
+    tokenSecret,
     {
-      expiresIn: 60 * 60, // 60 minutes
-      // algorithm: 'RS256'
+      expiresIn: 120 * 60, // 120 minutes
+      algorithm: 'HS256',
     },
   );
   return `Bearer ${token}`;
