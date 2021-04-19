@@ -20,7 +20,7 @@ services:
     environment:
       MONGO_CONNECTION_STRING: mongodb://mongo/scoring-api?retryWrites=true&w=majority
       TOKEN_SECRET: $TOKEN_SECRET
-    command: node --use_strict src/index.js
+    command: node --use_strict index.js
   test:
     build:
       context: .
