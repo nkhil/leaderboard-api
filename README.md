@@ -6,7 +6,7 @@
 
 ### Local development
 
-You will need an `.env` file with the following: 
+You will need an `.env` file with the following:
 
 ```bash
 MONGO_CONNECTION_STRING=your-mongo-atlas-connection-string
@@ -24,4 +24,3 @@ To run the tests using Docker
 ```bash
 npm run test:docker
 ```
-
