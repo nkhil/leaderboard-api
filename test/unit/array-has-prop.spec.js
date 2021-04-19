@@ -8,7 +8,7 @@ describe('#arrayHasProps', () => {
       { leaderboardId: '12345' },
       { leaderboardId: '12345' },
     ];
-    expect(arrayHasProps(teams, 'leaderboardId', leaderboardId)).toBe(false);
+    expect(arrayHasProps(teams, 'leaderboardId', leaderboardId)).toBe(true);
   });
 
   it('returns false if all items in an array do not have prop', () => {
@@ -17,6 +17,6 @@ describe('#arrayHasProps', () => {
       { leaderboardId: '66666' },
       { leaderboardId: '66666' },
     ];
-    expect(arrayHasProps(teams, 'leaderboardId', leaderboardId)).toBe(true);
+    expect(arrayHasProps(teams, 'leaderboardId', leaderboardId)).toBe(false);
   });
 });

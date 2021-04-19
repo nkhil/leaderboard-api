@@ -19,7 +19,7 @@
   "scripts": {
     "lint": "eslint src/**/*.js",
     "lint:fix": "eslint src/**/*.js --fix",
-    "test": "jest",
+    "test": "jest --forceExit",
     "test:unit": "jest --testPathPattern=/test/unit",
     "develop": "NODE_ENV=DEVELOPMENT nodemon --use_strict index.js",
     "start": "node --use_strict index.js",
