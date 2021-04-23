@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const OpenApiValidator = require('express-openapi-validator');
-const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
 const database = require('./lib/database');
 const middleware = require('./middleware');
@@ -21,9 +20,8 @@ const limiter = rateLimit({
 app.use(express.json({ limit: '1kb' }));
 
 const apiSpec = path.join(__dirname, '../openapi/openapi.yml');
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.text());
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(limiter);
 app.use('/swagger', express.static(apiSpec));
 app.use(cors());
