@@ -1,4 +1,4 @@
-const logger = require('pino')();
+const logger = require('@subgeniuscorp/logger');
 const { findUserCredsByClientId } = require('../lib/database/utils');
 const { validateHash } = require('../lib/apikey');
 

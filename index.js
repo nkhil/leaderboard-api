@@ -1,4 +1,4 @@
-const logger = require('pino')();
+const logger = require('@subgeniuscorp/logger');
 const init = require('./src');
 
 const { port } = require('./src/config');
