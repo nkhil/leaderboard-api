@@ -1,4 +1,4 @@
-const logger = require('pino')();
+const logger = require('@subgeniuscorp/logger');
 const db = require('../lib/database/utils');
 const { arrayHasProps } = require('../helpers/array-has-prop');
 

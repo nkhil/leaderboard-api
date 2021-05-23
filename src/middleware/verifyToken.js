@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const logger = require('pino')();
+const logger = require('@subgeniuscorp/logger');
 const { tokenSecret } = require('../config');
 
 function extractToken(req) {

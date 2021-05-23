@@ -1,4 +1,4 @@
-const logger = require('pino')();
+const logger = require('@subgeniuscorp/logger');
 const AWS = require('aws-sdk');
 const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_BUCKET } = require('../constants');
 

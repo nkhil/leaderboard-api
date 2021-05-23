@@ -1,4 +1,4 @@
-const logger = require('pino')();
+const logger = require('@subgeniuscorp/logger');
 
 function ping(_, res) {
   logger.info({ msg: 'SCOR_ping: Liveness request received' });
