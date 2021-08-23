@@ -1,4 +1,4 @@
-const logger = require('pino')();
+const logger = require('@subgeniuscorp/logger');
 const jwt = require('jsonwebtoken');
 const { tokenSecret } = require('../config');
 
