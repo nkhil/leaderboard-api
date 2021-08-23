@@ -31,6 +31,7 @@ To run all tests using Docker, please use:
 ```bash
 npm run test:docker
 ```
+
 This will spin up a an application container, a test container, and a database container to run the tests. 
 
 ## Design
@@ -75,9 +76,4 @@ The leaderboard API a simple REST API that helps with CRUDing (create, read, upd
 For the latest swagger endpoints, visit [https://api.leaderboardapi.com/swagger](https://api.leaderboardapi.com/swagger)
 
 ### Data model
-
-
-
-## Data model
-
 
